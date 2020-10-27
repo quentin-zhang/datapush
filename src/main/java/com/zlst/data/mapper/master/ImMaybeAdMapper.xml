@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zlst.data.mapper.master.ImMaybeAdMapper">
+    <select id="findAd" resultType="com.zlst.data.pojo.master.Addata">
+		select * from addata
+	</select>
+	<select id="findLive" resultType="com.zlst.data.pojo.master.ImMaybeAd">
+		select a.*,b.made_id from im_maybe_ad a left join im_made b on a.maybe_id = b.maybe_id
+	</select>
+</mapper>

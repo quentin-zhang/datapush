@@ -1,0 +1,32 @@
+# 服务器配置
+server:
+  servlet:
+    context-path: /demo
+  port: 8081
+
+swagger:
+  enabled: true
+  title: demo
+  description: 中联视听
+  version: v1.0
+  base-package: com.example.demo
+
+elasticsearch_ip: 192.168.1.45:10200,192.168.1.50:10200,192.168.1.230:10200
+
+spring:
+  datasource: #database
+    master:
+      jdbc-url: jdbc:mysql://192.168.1.50:3306/ados_live_db?characterEncoding=UTF-8&useUnicode=true&useSSL=false
+      username: dev
+      password: dev@vmDB123
+      driver-class-name: com.mysql.jdbc.Driver
+    slave:
+      jdbc-url: jdbc:mysql://192.168.1.46:3306/ad-plat?characterEncoding=UTF-8&useUnicode=true&useSSL=false
+      username: dev
+      password: ceshi@123
+      driver-class-name: com.mysql.jdbc.Driver
+
+mybatis-plus:
+  mapper-locations: classpath*:com/zlst/data/**/xml/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
