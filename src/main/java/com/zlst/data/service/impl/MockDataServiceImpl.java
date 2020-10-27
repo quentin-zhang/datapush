@@ -1,7 +1,6 @@
 package com.zlst.data.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.demo.utils.DateUtil3;
 import com.zlst.data.common.ElasticsearchRestClient;
 import com.zlst.data.common.ResponseHaveDataResult;
 import com.zlst.data.common.ResponseHaveDataResultBuilder;
@@ -15,6 +14,7 @@ import com.zlst.data.pojo.slave.AdIllegalResult;
 import com.zlst.data.service.AdIllegalResultService;
 import com.zlst.data.service.MockDataService;
 import com.zlst.data.service.PubIllegalItemService;
+import com.zlst.data.utils.DateUtil3;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -48,16 +48,6 @@ public class MockDataServiceImpl extends ServiceImpl<ImMaybeAdMapper, ImMaybeAd>
     private static final String PATTERN_DATE_TIME = "yyyy-MM-dd HH:mm:ss";
     DateTimeFormatter df = DateTimeFormatter.ofPattern(PATTERN);
     DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(PATTERN_DATE_TIME);
-    @Override
-    public ResponseHaveDataResult<String> productLiveMock(LiveRequest dataCountRequest) {
-        List<MockData> mockDataList = new ArrayList<MockData>();
-        for(int i=0;i<10;i++)
-        {
-            mockDataList.add(generateMockData());
-        }
-        mockDataDao.bulkInsert(mockDataList);
-        return null;
-    }
 
     @Override
     public ResponseHaveDataResult<String> pushImMaybeAd(LiveRequest dataCountRequest) {
@@ -94,7 +84,7 @@ public class MockDataServiceImpl extends ServiceImpl<ImMaybeAdMapper, ImMaybeAd>
         return  imMaybeAdMapper.findAd();
     }
 
-    private MockData liveESData(ImMaybeAd imMaybeAd)
+    private MockData liveEsData(ImMaybeAd imMaybeAd)
     {
         MockData mockData = new MockData();
 

@@ -29,15 +29,9 @@ public class MockDataController {
     @Resource
     private MockDataService mockDataService;
 
-    @PostMapping(value = "/generate")
-    @ApiOperation(value = "造数据", notes = "造数据")
-    public ResponseHaveDataResult<String> liveSummaryList(@RequestBody LiveRequest liveRequest) throws Exception{
-        return mockDataService.productLiveMock(liveRequest);
-    }
-
     @PostMapping(value = "/push/immaybead")
     @ApiOperation(value = "Mysql造数据", notes = "Mysql造数据")
-    public ResponseHaveDataResult<String> pushImMaybeAd(@RequestBody LiveRequest liveRequest) throws Exception{
+    public ResponseHaveDataResult<String> pushImMaybeAd(@RequestBody LiveRequest liveRequest) {
         return mockDataService.pushImMaybeAd(liveRequest);
     }
 }

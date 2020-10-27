@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.zlst.data.pojo.master.Addata;
 import com.zlst.data.pojo.master.ImMaybeAd;
 import org.apache.ibatis.annotations.Mapper;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -15,6 +14,15 @@ import java.util.List;
  **/
 @Mapper
 public interface ImMaybeAdMapper extends BaseMapper<ImMaybeAd> {
+    /**
+     * 查找广告
+     * @return
+     */
     public List<Addata> findAd();
+
+    /**
+     * 查询直播
+     * @return
+     */
     public List<ImMaybeAd> findLive();
 }

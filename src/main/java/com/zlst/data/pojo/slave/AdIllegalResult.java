@@ -4,6 +4,9 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+/**
+ * @author Quentin Zhang
+ */
 @Data
 @TableName("ad_illegal_result")
 public class AdIllegalResult {

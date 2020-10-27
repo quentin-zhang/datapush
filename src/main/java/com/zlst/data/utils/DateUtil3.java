@@ -1,12 +1,12 @@
-package com.example.demo.utils;
-
-import io.swagger.models.auth.In;
+package com.zlst.data.utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 public class DateUtil3 {
+
+    private static final int TIME_LENGTH = 3;
 
         /**
      * get first date of given month and year
@@ -84,7 +84,7 @@ public class DateUtil3 {
     {
         String result = "0";
         String[] splited = time.split(":");
-        if(splited.length == 3)
+        if(splited.length == TIME_LENGTH)
         {
             int hour = Integer.parseInt( splited[0]) * 3600;
             int minite = Integer.parseInt(splited[1]) * 60;

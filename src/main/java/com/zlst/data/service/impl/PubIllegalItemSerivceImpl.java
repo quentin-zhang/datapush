@@ -22,6 +22,7 @@ public class PubIllegalItemSerivceImpl extends ServiceImpl<PubIllegalItemMapper,
     @Resource
     PubIllegalItemMapper pubIllegalItemMapper;
 
+    @Override
     public String getIllegalItems(String illegalCode)
     {
         StringBuilder result = new StringBuilder();
@@ -36,6 +37,7 @@ public class PubIllegalItemSerivceImpl extends ServiceImpl<PubIllegalItemMapper,
         return result.toString();
     }
 
+    @Override
     public String getIllegalSimpleItems(String illegalCode)
     {
         StringBuilder result = new StringBuilder();
