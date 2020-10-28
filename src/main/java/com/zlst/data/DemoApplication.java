@@ -12,6 +12,9 @@ import java.net.UnknownHostException;
 @Slf4j
 //@MapperScan("com.zlst.data.dao.*.**")
 @SpringBootApplication()
+/**
+ * 应用程序启动类
+ */
 public class DemoApplication {
 
     public static void main(String[] args) throws UnknownHostException {

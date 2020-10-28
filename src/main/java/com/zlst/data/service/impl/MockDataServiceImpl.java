@@ -73,7 +73,7 @@ public class MockDataServiceImpl extends ServiceImpl<ImMaybeAdMapper, ImMaybeAd>
         {
             adIllegalResultList.add(convertAdIllegalResult(addata));
         }
-        adIllegalResultService.saveBatch(adIllegalResultList);
+//        adIllegalResultService.saveBatch(adIllegalResultList);
         return ResponseHaveDataResultBuilder.success("导入成功");
     }
 
@@ -222,9 +222,6 @@ public class MockDataServiceImpl extends ServiceImpl<ImMaybeAdMapper, ImMaybeAd>
         adIllegalResult.setDatapushId("");
         return adIllegalResult;
     }
-
-
-
 
     private MockData generateMockData()
     {
