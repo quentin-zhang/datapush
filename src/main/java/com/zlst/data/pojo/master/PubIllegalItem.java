@@ -3,6 +3,10 @@ package com.zlst.data.pojo.master;
 import lombok.Data;
 
 @Data
+/**
+ *
+ * @author Quentin Zhang
+ */
 public class PubIllegalItem {
 
   private long illegalId;

@@ -1,6 +1,9 @@
 package com.zlst.data.common;
 
-
+/**
+ *
+ * @author Quentin Zhang
+ */
 public class ResponseHaveDataResultBuilder {
 
     public static <T> ResponseHaveDataResult<T> success(T t) {

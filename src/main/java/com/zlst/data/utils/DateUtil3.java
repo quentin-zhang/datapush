@@ -4,6 +4,10 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ *
+ * @author Quentin Zhang
+ */
 public class DateUtil3 {
 
     private static final int TIME_LENGTH = 3;

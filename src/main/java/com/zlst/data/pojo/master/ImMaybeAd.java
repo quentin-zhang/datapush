@@ -4,6 +4,10 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 @Data
+/**
+ *
+ * @author Quentin Zhang
+ */
 public class ImMaybeAd {
   private long maybeId;
   private long sampleId;

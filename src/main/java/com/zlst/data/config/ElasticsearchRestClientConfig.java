@@ -1,4 +1,4 @@
-package com.zlst.data.common;
+package com.zlst.data.config;
 
 
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +18,11 @@ import java.util.Objects;
 
 @Slf4j
 @Configuration
-public class ElasticsearchRestClient {
+/**
+ *
+ * @author Quentin Zhang
+ */
+public class ElasticsearchRestClientConfig {
     private static final int ADDRESS_LENGTH = 2;
     private static final String HTTP_SCHEME = "http";
 

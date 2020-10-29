@@ -13,7 +13,8 @@ import java.net.UnknownHostException;
 //@MapperScan("com.zlst.data.dao.*.**")
 @SpringBootApplication()
 /**
- * 应用程序启动类
+ *
+ * @author Quentin Zhang
  */
 public class DemoApplication {
 

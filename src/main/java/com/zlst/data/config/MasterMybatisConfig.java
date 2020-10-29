@@ -16,7 +16,7 @@ import javax.sql.DataSource;
  * @create: 2020-10-20 09:17
  **/
 @Configuration
-@MapperScan(value={"com.zlst.data.mapper.master*"},sqlSessionFactoryRef = "masterSqlSessionFactory")
+@MapperScan(value={"com.zlst.**.mapper.master**"},sqlSessionFactoryRef = "masterSqlSessionFactory")
 public class MasterMybatisConfig {
     /**
      * 注意，此处需要使用MybatisSqlSessionFactoryBean，不是SqlSessionFactoryBean，
@@ -29,7 +29,7 @@ public class MasterMybatisConfig {
         mybatisSqlSessionFactoryBean.setDataSource(dataSource);
         //mapper的xml文件位置
         PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-        String locationPattern = "classpath*:com/zlst/data/mapper/master/*.xml";
+        String locationPattern = "classpath*:com/zlst/data/mapper/master/xml/*.xml";
         mybatisSqlSessionFactoryBean.setMapperLocations(resolver.getResources(locationPattern));
         //对应数据库的entity位置
         String typeAliasesPackage = "com.zlst.data.pojo.master";

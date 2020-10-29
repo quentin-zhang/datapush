@@ -27,6 +27,6 @@ spring:
       driver-class-name: com.mysql.jdbc.Driver
 
 mybatis-plus:
-  mapper-locations: classpath*:com/zlst/data/**/xml/*.xml
+  mapper-locations: classpath*:com/zlst/**/mapper/**/xml/*Mapper.xml
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

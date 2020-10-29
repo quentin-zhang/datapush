@@ -1,7 +1,7 @@
 package com.zlst.data.mapper.master;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zlst.data.common.ElasticsearchRestClient;
+import com.zlst.data.config.ElasticsearchRestClientConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
@@ -29,13 +29,13 @@ public class MockDataDao {
     private static final String TYPE="_doc";
 
     @Resource
-    ElasticsearchRestClient elasticsearchRestClient;
+    ElasticsearchRestClientConfig elasticsearchRestClientConfig;
 
     @Autowired
     private ObjectMapper objectMapper;
 
     public void bulkInsert(List mockList){
-        RestHighLevelClient restClient =  new RestHighLevelClient(elasticsearchRestClient.restClientBuilder());
+        RestHighLevelClient restClient =  new RestHighLevelClient(elasticsearchRestClientConfig.restClientBuilder());
         BulkRequest bulkRequest = new BulkRequest();
         mockList.forEach(mock -> {
             IndexRequest indexRequest = new IndexRequest(INDEX).

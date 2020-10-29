@@ -1,18 +1,17 @@
 package com.zlst.data.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.zlst.data.common.ElasticsearchRestClient;
+import com.zlst.data.config.ElasticsearchRestClientConfig;
 import com.zlst.data.common.ResponseHaveDataResult;
 import com.zlst.data.common.ResponseHaveDataResultBuilder;
 import com.zlst.data.mapper.master.ImMaybeAdMapper;
 import com.zlst.data.mapper.master.MockDataDao;
-import com.zlst.data.pojo.master.Addata;
-import com.zlst.data.pojo.master.ImMaybeAd;
-import com.zlst.data.pojo.master.LiveRequest;
-import com.zlst.data.pojo.master.MockData;
+import com.zlst.data.pojo.master.*;
 import com.zlst.data.pojo.slave.AdIllegalResult;
 import com.zlst.data.service.AdIllegalResultService;
-import com.zlst.data.service.MockDataService;
+import com.zlst.data.service.PubAreaService;
+import com.zlst.data.service.PushDataService;
 import com.zlst.data.service.PubIllegalItemService;
 import com.zlst.data.utils.DateUtil3;
 import lombok.extern.slf4j.Slf4j;
@@ -32,9 +31,9 @@ import java.util.List;
  **/
 @Slf4j
 @Service
-public class MockDataServiceImpl extends ServiceImpl<ImMaybeAdMapper, ImMaybeAd> implements MockDataService {
+public class PushDataServiceImpl extends ServiceImpl<ImMaybeAdMapper, ImMaybeAd> implements PushDataService {
     @Resource
-    ElasticsearchRestClient elasticsearchRestClient;
+    ElasticsearchRestClientConfig elasticsearchRestClientConfig;
     @Resource
     MockDataDao mockDataDao;
     @Resource
@@ -43,6 +42,8 @@ public class MockDataServiceImpl extends ServiceImpl<ImMaybeAdMapper, ImMaybeAd>
     PubIllegalItemService pubIllegalItemService;
     @Resource
     AdIllegalResultService adIllegalResultService;
+    @Resource
+    PubAreaService pubAreaService;
 
     private static final String PATTERN = "yyyy-MM-dd";
     private static final String PATTERN_DATE_TIME = "yyyy-MM-dd HH:mm:ss";
@@ -51,37 +52,46 @@ public class MockDataServiceImpl extends ServiceImpl<ImMaybeAdMapper, ImMaybeAd>
 
     @Override
     public ResponseHaveDataResult<String> pushImMaybeAd(LiveRequest dataCountRequest) {
-//        QueryWrapper<ImMaybeAd> queryWrapper = new QueryWrapper<>();
-//        queryWrapper.lambda()
-//                .and(obj1 -> obj1.ge(ImMaybeAd::getMaybeId, 23))
-//                .or(obj2 -> obj2.le(ImMaybeAd::getMaybeId, 33));
-//        List<ImMaybeAd> imMaybeAdList = list(queryWrapper);
-
         //直播表导入 MySQL --> ES
-//        QueryWrapper<ImMaybeAd> queryWrapper = new QueryWrapper<>();
-//        List<ImMaybeAd> imMaybeAdList = list(queryWrapper);
-//        List<MockData> mockDataList = new ArrayList<MockData>();
-//        for (ImMaybeAd imMaybeAd : imMaybeAdList)
-//        {
-//            mockDataList.add(liveESData(imMaybeAd));
-//        }
-//        mockDataDao.bulkInsert(mockDataList);
+//        liveConvert();
         //违法广告表 MySQL --> MySQL
+        illegalConvert();
+        return ResponseHaveDataResultBuilder.success("导入成功");
+    }
+
+    /**
+     * 直播数据转化推送
+     */
+    private Boolean liveConvert()
+    {
+        Boolean result = false;
+        QueryWrapper<ImMaybeAd> queryWrapper = new QueryWrapper<>();
+        List<ImMaybeAd> imMaybeAdList = list(queryWrapper);
+        List<MockData> mockDataList = new ArrayList<MockData>();
+        for (ImMaybeAd imMaybeAd : imMaybeAdList)
+        {
+            mockDataList.add(liveEsData(imMaybeAd));
+        }
+        mockDataDao.bulkInsert(mockDataList);
+        result = true;
+        return result;
+    }
+
+    /**
+     * 违法数据转化
+     */
+    private Boolean illegalConvert()
+    {
+        Boolean result = false;
         List<Addata> addataList = imMaybeAdMapper.findAd();
         List<AdIllegalResult> adIllegalResultList = new ArrayList<>();
         for (Addata addata : addataList)
         {
             adIllegalResultList.add(convertAdIllegalResult(addata));
         }
-//        adIllegalResultService.saveBatch(adIllegalResultList);
-        return ResponseHaveDataResultBuilder.success("导入成功");
-    }
-
-
-
-    @Override
-    public List<Addata> findAddata() {
-        return  imMaybeAdMapper.findAd();
+        adIllegalResultService.saveBatch(adIllegalResultList);
+        result = true;
+        return result;
     }
 
     private MockData liveEsData(ImMaybeAd imMaybeAd)
@@ -118,53 +128,6 @@ public class MockDataServiceImpl extends ServiceImpl<ImMaybeAdMapper, ImMaybeAd>
         mockData.setFOLLOWING_COUNT(imMaybeAd.getFollowingCount());
         mockData.setFOLLOWER_COUNT(imMaybeAd.getFollowerCount());
 
-        return mockData;
-    }
-
-    private MockData mysqlData(Addata addata)
-    {
-        MockData mockData = new MockData();
-//        Random random = new Random();
-//        int randomIndex = random.nextInt(LiveConstant.AD_ADDRESS_ARRAY.length);
-//        int idIndex = random.nextInt(LiveConstant.ID_INDEX);
-//        int viewerCount = random.nextInt(LiveConstant.COUNT_INDEX);
-//        mockData.setAD_ADDRESS(LiveConstant.AD_ADDRESS_ARRAY[randomIndex]);
-//        mockData.setAD_ID(String.valueOf(addata.getMadeId()));
-//        mockData.setAD_NAME(LiveConstant.AD_NAME_ARRAY[randomIndex]);
-//        mockData.setAD_TYPE_ID(String.valueOf(addata.getAdTypeId()));
-//        mockData.setAD_TYPE_NAME(addata.getAdTypeName());
-//        mockData.setAREA_CODE(LiveConstant.AD_AREA_CODE_ARRAY[randomIndex]);
-//        mockData.setBEGIN_TIME(addata.getLiveStartTime() != null ? addata.getLiveStartTime().getTime() : 0);
-//        mockData.setCITY_NAME("重庆市");
-//        mockData.setCOUNTY_NAME(LiveConstant.AD_COUNTY_NAME_ARRAY[randomIndex]);
-//        mockData.setCUSTOMER_ID("888");
-//        mockData.setEND_TIME(addata.getLiveEndTime() != null ? addata.getLiveEndTime().getTime():0);
-//        mockData.setFTP_PATH(addata.getLiveVideoPath());
-//        mockData.setILLEGAL_CODE(addata.getIllegalCode());
-//        mockData.setILLEGAL_LV(0);
-//        mockData.setINSERT_TIME(System.currentTimeMillis());
-//        mockData.setIS_DEL(0);
-//        mockData.setIS_DISPLAY_ON_PLAT("1");
-//        mockData.setIS_LEGAL("0");
-//        mockData.setLATITUDE("");
-//        mockData.setLONGITUDE("");
-//        mockData.setMEDIA_ID(LiveConstant.MEDIA_ID_ARRAY[randomIndex]);
-//        mockData.setMEDIA_NAME(addata.getMediaName());
-//        mockData.setOLD_ID(String.valueOf(addata.getMaybeId()));
-//        mockData.setPLAY_DATE(addata.getLiveStartTime().toLocalDateTime().format(df));
-//        mockData.setPLAY_LEAN(addata.getLiveDuraTime());
-//        mockData.setILLEGAL_CONTENT(pubIllegalItemService.getIllegalItems(addata.getIllegalCode()));
-//        mockData.setPROOF_PATH("");
-//        mockData.setPROVINCE_NAME("重庆市");
-//        mockData.setQUERY_AREA_LEVEL("2");
-//        mockData.setSITE_TYPE(LiveConstant.SITE_TYPE_ARRAY[randomIndex]);
-//        mockData.setSOURCE_ID(LiveConstant.SOURCE_ID_ARRAY[randomIndex]);
-//        mockData.setSOURCE_NAME(addata.getLiveRoomOwnerName());
-//        mockData.setSTATE("2");
-//        mockData.setGOODS_COUNT(addata.getGoodsCount());
-//        mockData.setVIEWER_COUNT(addata.getLiveAudienceCount());
-//        mockData.setWATCH_COUNT(addata.getWatchCount());
-//        mockData.setLIVE_USER_HEAD_PORTRAITS(addata.getLiveUserHeadPortraits());
         return mockData;
     }
 
@@ -208,9 +171,11 @@ public class MockDataServiceImpl extends ServiceImpl<ImMaybeAdMapper, ImMaybeAd>
         adIllegalResult.setSourceName(addata.getLiveRoomOwnerName());
         adIllegalResult.setMediaName(addata.getMediaName());
         //TODO:省份
-        adIllegalResult.setProvinceName("");
-        adIllegalResult.setCityName("");
-        adIllegalResult.setCountyName("");
+        //获取省市区名称
+        AreaInfo areaInfo = pubAreaService.getAreaInfoByCode(addata.getAreaCode());
+        adIllegalResult.setProvinceName(areaInfo.getProvinceName());
+        adIllegalResult.setCityName(areaInfo.getCityName());
+        adIllegalResult.setCountyName(areaInfo.getCountryName());
         adIllegalResult.setOldId(addata.getMadeId());
         adIllegalResult.setIllegalContent(pubIllegalItemService.getIllegalItems(addata.getIllegalCode()));
         adIllegalResult.setFtpPath(addata.getLiveVideoPath());
@@ -226,6 +191,7 @@ public class MockDataServiceImpl extends ServiceImpl<ImMaybeAdMapper, ImMaybeAd>
     private MockData generateMockData()
     {
         MockData mockData = new MockData();
+//TODO:随机生成Mock数据
 //        Random random = new Random();
 //        int randomIndex = random.nextInt(LiveConstant.AD_ADDRESS_ARRAY.length);
 //        int idIndex = random.nextInt(LiveConstant.ID_INDEX);
@@ -272,5 +238,14 @@ public class MockDataServiceImpl extends ServiceImpl<ImMaybeAdMapper, ImMaybeAd>
     private String adPlayLean(String dura)
     {
         return DateUtil3.timeToSecond(dura);
+    }
+
+    private void queryByTimeRange()
+    {
+        QueryWrapper<ImMaybeAd> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+                .and(obj1 -> obj1.ge(ImMaybeAd::getMaybeId, 23))
+                .or(obj2 -> obj2.le(ImMaybeAd::getMaybeId, 33));
+        List<ImMaybeAd> imMaybeAdList = list(queryWrapper);
     }
 }

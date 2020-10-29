@@ -2,7 +2,7 @@ package com.zlst.data.controller;
 
 import com.zlst.data.common.ResponseHaveDataResult;
 import com.zlst.data.pojo.master.LiveRequest;
-import com.zlst.data.service.MockDataService;
+import com.zlst.data.service.PushDataService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -27,11 +27,11 @@ import javax.annotation.Resource;
 public class MockDataController {
 
     @Resource
-    private MockDataService mockDataService;
+    private PushDataService pushDataService;
 
     @PostMapping(value = "/push/immaybead")
     @ApiOperation(value = "Mysql造数据", notes = "Mysql造数据")
     public ResponseHaveDataResult<String> pushImMaybeAd(@RequestBody LiveRequest liveRequest) {
-        return mockDataService.pushImMaybeAd(liveRequest);
+        return pushDataService.pushImMaybeAd(liveRequest);
     }
 }

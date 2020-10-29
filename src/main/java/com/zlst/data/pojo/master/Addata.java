@@ -56,4 +56,10 @@ public class Addata {
     public String illegalContent;
     @ApiModelProperty(value = "广告时长")
     public String dura;
+    @ApiModelProperty(value = "区域编码")
+    public String areaCode;
+    @ApiModelProperty(value = "直播插入时间")
+    public String insertTime;
+    @ApiModelProperty(value = "违法插入时间")
+    public String madeDate;
 }
